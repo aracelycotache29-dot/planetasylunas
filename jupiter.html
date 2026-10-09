@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeta Júpiter y sus 115 Lunas sin Colisiones</title>
+    <link rel="stylesheet" href="jupiter.css">
+</head>
+
+<body>
+
+    <div class="universo" id="escenario">
+
+        <header class="titulo">
+            <a href="planetas.html" class="volver">← Volver a planetas</a>
+            <h1>Planeta Júpiter</h1>
+            <p>115 lunas flotando de forma segura con sus respectivos nombres</p>
+        </header>
+
+        <!-- Estrellas de fondo -->
+        <div class="estrella e1"></div>
+        <div class="estrella e2"></div>
+        <div class="estrella e3"></div>
+        <div class="estrella e4"></div>
+        <div class="estrella e5"></div>
+        <div class="estrella e6"></div>
+        <div class="estrella e7"></div>
+        <div class="estrella e8"></div>
+
+        <!-- Planeta Júpiter Central -->
+        <div class="planeta" id="planeta-júpiter">
+            <div class="gran-mancha-roja"></div>
+        </div>
+
+        <!-- Contenedor general para todas las lunas -->
+        <div id="contenedor-lunas"></div>
+
+        <!-- Elementos espaciales -->
+        <div class="nave nave1">🚀</div>
+        <div class="nave nave2">🛸</div>
+        <div class="cometa">☄️</div>
+
+        <!-- Botón inferior -->
+        <a href="index.html" class="boton">
+            Ir al Inicio
+        </a>
+
+    </div>
+
+    <script>
+        // Principales lunas galileanas y destacadas de Júpiter
+        const lunasDestacadas = [
+            "Ío", "Europa", "Ganímedes", "Calixto", "Amaltea", "Himalia", "Elara", "Pasífae", 
+            "Sinope", "Lisitea", "Carmé", "Ananké", "Leda", "Adrastea", "Metis", "Tebe", 
+            "Calírroe", "Temisto", "Megalite", "Tione", "Jocasta", "Harpálice", "Praxídice", 
+            "Ananke", "Isonoé", "Aedea", "Cale", "Eufeme", "Euriante", "Helike", "Ortosio", 
+            "Sponde", "Aedé", "Euporia", "Hegémone", "Mnemé", "Aoede", "Kallichore", "Kore", 
+            "Cilene", "Polux", "Dia", "Philophrosyne", "Eirene", "Valetudo", "Ersa", "Pandia"
+        ];
+
+        // Completa las 95 lunas
+        const nombresLunas = [...lunasDestacadas];
+        while (nombresLunas.length < 95) {
+            const num = nombresLunas.length + 1;
+            const anio = 2000 + (num % 23);
+            nombresLunas.push(`S/${anio} J ${num - 40}`);
+        }
+
+        // Las 4 lunas principales
+        const lunasGrandes = ["Ío", "Europa", "Ganímedes", "Calixto"];
+        const contenedor = document.getElementById('contenedor-lunas');
+
+        const anchoPantalla = window.innerWidth;
+        const altoPantalla = window.innerHeight;
+
+        // Centro de la pantalla (donde está Júpiter)
+        const centroX = anchoPantalla / 2;
+        const centroY = altoPantalla / 2;
+
+        // Radio de exclusión para no tapar a Júpiter
+        const radioExclusionPlaneta = 190; 
+
+        const posicionesLunas = [];
+
+        // Zonas de exclusión para textos y botones
+        const zonasExclusionTexto = [
+            { minX: centroX - 280, maxX: centroX + 280, minY: 0, maxY: 140 }, // Zona superior
+            { minX: centroX - 140, maxX: centroX + 140, minY: altoPantalla - 100, maxY: altoPantalla } // Zona inferior
+        ];
+
+        function calcularDistancia(x1, y1, x2, y2) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function chocaConTexto(x, y) {
+            return zonasExclusionTexto.some(zona => 
+                x >= zona.minX && x <= zona.maxX && y >= zona.minY && y <= zona.maxY
+            );
+        }
+
+        nombresLunas.forEach((nombre) => {
+            const esGrande = lunasGrandes.includes(nombre);
+            // Margen amplio para evitar que se amontonen las lunas grandes
+            const margenSeguridad = esGrande ? 45 : 18; 
+
+            let xValida = 0;
+            let yValida = 0;
+            let intentoValido = false;
+            let maxIntentos = 1200;
+
+            while (!intentoValido && maxIntentos > 0) {
+                maxIntentos--;
+
+                // Generar posición aleatoria respetando márgenes de los bordes
+                const x = Math.random() * (anchoPantalla - 120) + 60;
+                const y = Math.random() * (altoPantalla - 120) + 60;
+
+                // 1. Evitar textos
+                if (chocaConTexto(x, y)) continue;
+
+                // 2. Evitar el centro (Júpiter)
+                const distAlPlaneta = calcularDistancia(x, y, centroX, centroY);
+                if (distAlPlaneta < radioExclusionPlaneta) continue;
+
+                // 3. Evitar colisión con otras lunas
+                let hayChoque = false;
+                for (let pos of posicionesLunas) {
+                    const distEntreLunas = calcularDistancia(x, y, pos.x, pos.y);
+                    if (distEntreLunas < (margenSeguridad + pos.margen)) {
+                        hayChoque = true;
+                        break;
+                    }
+                }
+
+                if (!hayChoque) {
+                    xValida = x;
+                    yValida = y;
+                    intentoValido = true;
+                }
+            }
+
+            posicionesLunas.push({ x: xValida, y: yValida, margen: margenSeguridad });
+
+            // Crear el contenedor posicional de la luna
+            const elemLuna = document.createElement('div');
+            elemLuna.className = esGrande ? 'contenedor-luna-principal' : 'contenedor-luna-menor';
+            
+            // Posicionamiento absoluto correcto
+            elemLuna.style.position = 'absolute';
+            elemLuna.style.left = `${xValida}px`;
+            elemLuna.style.top = `${yValida}px`;
+
+            // Crear la animación de flotación
+            const delay = (Math.random() * 3).toFixed(2);
+            const duracion = (Math.random() * 2 + 3).toFixed(2);
+            elemLuna.style.animation = `flotarLuna ${duracion}s ease-in-out ${delay}s infinite alternate`;
+
+            // Crear elemento visual de la luna
+            const cuerpoLuna = document.createElement('div');
+            if (esGrande) {
+                // Nombre formateado para la clase CSS (ejemplo: luna-io, luna-europa)
+                const nombreClase = nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                cuerpoLuna.className = `luna-destacada luna-${nombreClase}`;
+            } else {
+                cuerpoLuna.className = 'punto-luna';
+            }
+
+            // Crear la etiqueta del nombre
+            const etiqueta = document.createElement('span');
+            etiqueta.className = esGrande ? 'nombre-luna-principal' : 'etiqueta-luna';
+            etiqueta.textContent = nombre;
+
+            elemLuna.appendChild(cuerpoLuna);
+            elemLuna.appendChild(etiqueta);
+            contenedor.appendChild(elemLuna);
+        });
+    </script>
+</body>
+</html>

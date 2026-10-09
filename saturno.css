@@ -1,0 +1,358 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #050816;
+    color: white;
+}
+
+.universo {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(
+        circle at center,
+        #2a2015 0%,
+        #050816 60%,
+        #02030a 100%
+    );
+}
+
+/* Encabezado */
+.titulo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 20;
+    animation: aparecer 2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.volver {
+    pointer-events: auto;
+    color: #fef08a;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 5px 14px;
+    border: 1px solid #facc15;
+    border-radius: 20px;
+    background: #111827aa;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+
+.volver:hover {
+    background: #eab308;
+    color: #111827;
+    box-shadow: 0 0 15px #facc15;
+}
+
+.titulo h1 {
+    font-size: 40px;
+    text-shadow: 0 0 20px rgba(250, 204, 21, 0.4);
+}
+
+.titulo p {
+    color: #fef08a;
+    font-size: 15px;
+}
+
+/* Estrellas Parpadeantes */
+.estrella {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    animation: parpadear 2s infinite alternate;
+}
+
+.e1 { top: 15%; left: 10%; }
+.e2 { top: 30%; left: 25%; animation-delay: .5s; }
+.e3 { top: 20%; right: 15%; animation-delay: 1s; }
+.e4 { top: 70%; left: 12%; animation-delay: .8s; }
+.e5 { top: 80%; right: 20%; animation-delay: 1.5s; }
+.e6 { top: 45%; right: 8%; animation-delay: .3s; }
+.e7 { top: 65%; left: 40%; animation-delay: 1.2s; }
+.e8 { top: 12%; left: 55%; animation-delay: .7s; }
+
+/* Planeta Saturno Central */
+.planeta-contenedor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+}
+
+.planeta {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #fef08a 0%,
+        #eab308 30%,
+        #ca8a04 60%,
+        #854d0e 100%
+    );
+    box-shadow:
+        0 0 40px rgba(250, 204, 21, 0.4),
+        inset -25px -20px 30px #2a1a08;
+    position: absolute;
+    z-index: 5;
+    animation: flotar 4s ease-in-out infinite;
+}
+
+/* Anillos de Saturno */
+.anillo-frontal, .anillo-trasero {
+    position: absolute;
+    width: 340px;
+    height: 90px;
+    border-radius: 50%;
+    border: 18px solid rgba(234, 179, 8, 0.65);
+    border-top-color: rgba(254, 240, 138, 0.8);
+    transform: rotate(-18deg);
+    pointer-events: none;
+}
+
+.anillo-trasero {
+    z-index: 3;
+    filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.3));
+}
+
+.anillo-frontal {
+    z-index: 6;
+    clip-path: inset(50% 0 0 0); /* Solo muestra la parte delantera del anillo */
+}
+
+/* Lunas Principales (Titán, Encélado, etc.) */
+.contenedor-luna-principal {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 8;
+    animation: flotarSuave 4s ease-in-out infinite alternate;
+}
+
+.luna {
+    border-radius: 50%;
+}
+
+.luna-titan {
+    width: 36px;
+    height: 36px;
+    background: radial-gradient(circle, #fde047, #ca8a04);
+    box-shadow: 0 0 14px rgba(250, 204, 21, 0.9);
+}
+
+.luna-encelado {
+    width: 26px;
+    height: 26px;
+    background: radial-gradient(circle, #ffffff, #cbd5e1);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+}
+
+.luna-rhea {
+    width: 28px;
+    height: 28px;
+    background: radial-gradient(circle, #e2e8f0, #64748b);
+    box-shadow: 0 0 10px rgba(226, 232, 240, 0.7);
+}
+
+.luna-dione {
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle, #f1f5f9, #475569);
+    box-shadow: 0 0 10px rgba(241, 245, 249, 0.7);
+}
+
+.luna-tetis {
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle, #ffffff, #94a3b8);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+.luna-japeto {
+    width: 25px;
+    height: 25px;
+    background: radial-gradient(circle, #94a3b8, #1e293b);
+    box-shadow: 0 0 8px rgba(148, 163, 184, 0.6);
+}
+
+.luna-mimas {
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle, #cbd5e1, #475569);
+    box-shadow: 0 0 6px rgba(203, 213, 225, 0.6);
+}
+
+.nombre-luna-principal {
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fef08a;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 0 0 4px #ca8a04;
+}
+
+/* Lunas Menores */
+.contenedor-luna-menor {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 7;
+    animation: flotarSuave 4s ease-in-out infinite alternate;
+    cursor: pointer;
+}
+
+.punto-luna {
+    width: 5px;
+    height: 5px;
+    background: #fef08a;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #fde047;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.etiqueta-luna {
+    font-size: 8px;
+    color: #fef3c7;
+    margin-top: 1px;
+    white-space: nowrap;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+    opacity: 0.8;
+    transition: opacity 0.2s, font-size 0.2s;
+}
+
+/* Destacado al pasar el ratón */
+.contenedor-luna-menor:hover {
+    z-index: 100;
+}
+
+.contenedor-luna-menor:hover .punto-luna {
+    transform: scale(2.5);
+    background: #ffffff;
+    box-shadow: 0 0 12px #ffffff;
+}
+
+.contenedor-luna-menor:hover .etiqueta-luna {
+    opacity: 1;
+    font-size: 11px;
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 8px #facc15;
+}
+
+/* Naves y Cometas */
+.nave {
+    position: absolute;
+    font-size: 45px;
+    z-index: 9;
+}
+
+.nave1 {
+    left: -100px;
+    top: 65%;
+    animation: nave1 8s linear infinite;
+}
+
+.nave2 {
+    right: -100px;
+    top: 30%;
+    animation: nave2 10s linear infinite;
+}
+
+.cometa {
+    position: absolute;
+    top: 20%;
+    left: -150px;
+    font-size: 40px;
+    animation: cometa 6s linear infinite;
+    z-index: 5;
+}
+
+/* Botón de Inicio */
+.boton {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 26px;
+    border: 1px solid #facc15;
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+    background: #111827aa;
+    backdrop-filter: blur(5px);
+    transition: .3s;
+    z-index: 20;
+}
+
+.boton:hover {
+    background: #eab308;
+    color: #111827;
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 0 25px #facc15;
+}
+
+/* Keyframes Animaciones */
+@keyframes aparecer {
+    from { opacity: 0; transform: translate(-50%, -30px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes flotar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes flotarSuave {
+    0% { margin-top: 0; }
+    100% { margin-top: -6px; }
+}
+
+@keyframes parpadear {
+    from { opacity: .2; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.5); }
+}
+
+@keyframes nave1 {
+    0% { left: -100px; transform: rotate(10deg); }
+    50% { left: 50%; transform: rotate(-5deg); }
+    100% { left: 110%; transform: rotate(10deg); }
+}
+
+@keyframes nave2 {
+    0% { right: -100px; transform: rotate(-10deg); }
+    50% { right: 50%; transform: rotate(5deg); }
+    100% { right: 110%; transform: rotate(-10deg); }
+}
+
+@keyframes cometa {
+    0% { left: -150px; top: 15%; transform: rotate(20deg); }
+    100% { left: 110%; top: 55%; transform: rotate(20deg); }
+}

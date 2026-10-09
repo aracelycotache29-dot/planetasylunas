@@ -1,0 +1,342 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #050816;
+    color: white;
+}
+
+.universo {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(
+        circle at center,
+        #2a1215 0%,
+        #050816 60%,
+        #02030a 100%
+    );
+}
+
+/* Encabezado */
+.titulo {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+    animation: aparecer 2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.volver {
+    color: #fca5a5;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 16px;
+    border: 1px solid #ef4444;
+    border-radius: 20px;
+    background: #111827aa;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+    margin-bottom: 5px;
+}
+
+.volver:hover {
+    background: #dc2626;
+    color: white;
+    box-shadow: 0 0 15px #ef4444;
+}
+
+.titulo h1 {
+    font-size: 48px;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.titulo p {
+    color: #fca5a5;
+    font-size: 18px;
+}
+
+/* Estrellas Parpadeantes */
+.estrella {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    animation: parpadear 2s infinite alternate;
+}
+
+.e1 { top: 15%; left: 10%; }
+.e2 { top: 30%; left: 25%; animation-delay: .5s; }
+.e3 { top: 20%; right: 15%; animation-delay: 1s; }
+.e4 { top: 70%; left: 12%; animation-delay: .8s; }
+.e5 { top: 80%; right: 20%; animation-delay: 1.5s; }
+.e6 { top: 45%; right: 8%; animation-delay: .3s; }
+.e7 { top: 65%; left: 40%; animation-delay: 1.2s; }
+.e8 { top: 12%; left: 55%; animation-delay: .7s; }
+
+/* Planeta Marte */
+.planeta {
+    width: 260px;
+    height: 260px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 30% 30%,
+        #f87171,
+        #dc2626 45%,
+        #7f1d1d 100%
+    );
+    box-shadow:
+        0 0 40px rgba(220, 38, 38, 0.6),
+        0 0 100px rgba(185, 28, 28, 0.4),
+        inset -30px -20px 40px #2a0a0a;
+    transition: transform .5s ease;
+    animation: flotar 4s ease-in-out infinite;
+    z-index: 4;
+}
+
+.planeta:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Marcas de la superficie marciana */
+.mancha {
+    position: absolute;
+    background: #991b1b;
+    border-radius: 40%;
+    opacity: .6;
+}
+
+.m1 {
+    width: 75px;
+    height: 40px;
+    top: 70px;
+    left: 40px;
+    transform: rotate(-15deg);
+}
+
+.m2 {
+    width: 100px;
+    height: 30px;
+    top: 140px;
+    right: 25px;
+    transform: rotate(10deg);
+}
+
+.m3 {
+    width: 60px;
+    height: 50px;
+    bottom: 35px;
+    left: 85px;
+    transform: rotate(20deg);
+}
+
+/* Contenedor general de las Lunas */
+.contenedor-luna {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+}
+
+/* Ubicaciones de las lunas */
+.fobos {
+    left: calc(50% - 220px); /* Izquierda del planeta */
+    animation: flotarFobos 4s ease-in-out infinite;
+}
+
+.deimos {
+    left: calc(50% + 190px); /* Derecha del planeta */
+    animation: flotarDeimos 4s ease-in-out infinite;
+    animation-delay: 0.8s;
+}
+
+/* Diseños irregulares para las lunas de Marte */
+.luna {
+    background: #d1d5db;
+    position: relative;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.fobos-img {
+    width: 50px;
+    height: 42px;
+    border-radius: 45% 55% 40% 60% / 50% 45% 55% 50%; /* Forma irregular de asteroide */
+}
+
+.deimos-img {
+    width: 38px;
+    height: 32px;
+    border-radius: 55% 45% 60% 40% / 45% 55% 45% 55%; /* Más pequeña e irregular */
+}
+
+.crater {
+    position: absolute;
+    background: #9ca3af;
+    border-radius: 50%;
+}
+
+.cr1 { top: 8px; left: 10px; width: 8px; height: 8px; }
+.cr2 { top: 20px; right: 8px; width: 10px; height: 10px; }
+.cr3 { bottom: 6px; left: 14px; width: 6px; height: 6px; }
+
+/* Nombres debajo de las Lunas */
+.nombre-luna {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #fca5a5;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 0 0 4px #ef4444;
+    letter-spacing: 1px;
+}
+
+/* Naves y Cometas */
+.nave {
+    position: absolute;
+    font-size: 45px;
+    z-index: 8;
+}
+
+.nave1 {
+    left: -100px;
+    top: 65%;
+    animation: nave1 8s linear infinite;
+}
+
+.nave2 {
+    right: -100px;
+    top: 30%;
+    animation: nave2 10s linear infinite;
+}
+
+.cometa {
+    position: absolute;
+    top: 20%;
+    left: -150px;
+    font-size: 40px;
+    animation: cometa 6s linear infinite;
+    z-index: 5;
+}
+
+/* Partículas */
+.particula {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f87171;
+    animation: particula 5s ease-in-out infinite;
+}
+
+.p1 { top: 35%; left: 35%; }
+.p2 { top: 60%; left: 65%; animation-delay: 1s; }
+.p3 { top: 25%; left: 70%; animation-delay: 2s; }
+.p4 { top: 75%; left: 30%; animation-delay: 1.5s; }
+
+/* Botón inferior */
+.boton {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 28px;
+    border: 1px solid #ef4444;
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+    background: #111827aa;
+    backdrop-filter: blur(5px);
+    transition: .3s;
+    z-index: 10;
+}
+
+.boton:hover {
+    background: #dc2626;
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 0 25px #ef4444;
+}
+
+/* Animaciones */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -30px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes flotar {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -15px; }
+}
+
+@keyframes flotarFobos {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -12px; }
+}
+
+@keyframes flotarDeimos {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -10px; }
+}
+
+@keyframes parpadear {
+    from { opacity: .2; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.5); }
+}
+
+@keyframes nave1 {
+    0% { left: -100px; transform: rotate(10deg); }
+    50% { left: 50%; transform: rotate(-5deg); }
+    100% { left: 110%; transform: rotate(10deg); }
+}
+
+@keyframes nave2 {
+    0% { right: -100px; transform: rotate(-10deg); }
+    50% { right: 50%; transform: rotate(5deg); }
+    100% { right: 110%; transform: rotate(-10deg); }
+}
+
+@keyframes cometa {
+    0% { left: -150px; top: 15%; transform: rotate(20deg); }
+    100% { left: 110%; top: 55%; transform: rotate(20deg); }
+}
+
+@keyframes particula {
+    0%, 100% { transform: translateY(0) scale(1); opacity: .3; }
+    50% { transform: translateY(-50px) scale(1.8); opacity: 1; }
+}
+
+/* Adaptabilidad a pantallas pequeñas */
+@media (max-width: 768px) {
+    .titulo h1 { font-size: 34px; }
+    .titulo p { font-size: 14px; }
+    .planeta { width: 190px; height: 190px; }
+    .fobos { left: calc(50% - 135px); }
+    .deimos { left: calc(50% + 120px); }
+    .nombre-luna { font-size: 11px; }
+}

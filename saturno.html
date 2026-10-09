@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeta Saturno y sus 293 Lunas sin Colisiones</title>
+    <link rel="stylesheet" href="saturno.css">
+</head>
+
+<body>
+
+    <div class="universo" id="escenario">
+
+        <header class="titulo">
+            <a href="planetas.html" class="volver">← Volver a planetas</a>
+            <h1>Planeta Saturno</h1>
+            <p>293 lunas flotando de forma segura con sus respectivos nombres</p>
+        </header>
+
+        <!-- Estrellas de fondo -->
+        <div class="estrella e1"></div>
+        <div class="estrella e2"></div>
+        <div class="estrella e3"></div>
+        <div class="estrella e4"></div>
+        <div class="estrella e5"></div>
+        <div class="estrella e6"></div>
+        <div class="estrella e7"></div>
+        <div class="estrella e8"></div>
+
+        <!-- Planeta Saturno Central con Anillos -->
+        <div class="planeta-contenedor" id="saturno-centro">
+            <div class="anillo-trasero"></div>
+            <div class="planeta" id="planeta-saturno"></div>
+            <div class="anillo-frontal"></div>
+        </div>
+
+        <!-- Contenedor general para las 293 lunas -->
+        <div id="contenedor-lunas"></div>
+
+        <!-- Elementos espaciales -->
+        <div class="nave nave1">🚀</div>
+        <div class="nave nave2">🛸</div>
+        <div class="cometa">☄️</div>
+
+        <!-- Botón inferior -->
+        <a href="index.html" class="boton">
+            Ir al Inicio
+        </a>
+
+    </div>
+
+    <script>
+    // Principales lunas destacadas de Saturno
+        const lunasDestacadas = [
+            "Titán", "Encélado", "Rhea", "Dione", "Tetis", "Jápeto", "Mimas", "Hiperión", "Febe",
+            "Jano", "Epimeteo", "Prometeo", "Pandora", "Helena", "Telesto", "Calipso", "Pan", 
+            "Dafne", "Atlas", "Metone", "Anthe", "Palene", "Polideuco", "Egeón", "Siarnaq", "Tarqeq",
+            "Albíorix", "Kiviuq", "Ijiraq", "Erriapo", "Tarvos", "Ymir", "Skathi", "Mundilfari", 
+            "Suttungr", "Thrymr", "Bebhionn", "Gerd", "Gunnlod", "Skoll", "Greip", "Hati"
+        ];
+
+        // Generar nombres para completar las 293 lunas
+        const nombresLunas = [...lunasDestacadas];
+        while (nombresLunas.length < 293) {
+            const num = nombresLunas.length + 1;
+            const anio = 2004 + (num % 20);
+            nombresLunas.push(`S/${anio} S ${num - 30}`);
+        }
+
+        const lunasGrandes = ["Titán", "Encélado", "Rhea", "Dione", "Tetis", "Jápeto", "Mimas"];
+        const contenedor = document.getElementById('contenedor-lunas');
+
+        const anchoPantalla = window.innerWidth;
+        const altoPantalla = window.innerHeight;
+
+        // Coordenadas del centro de Saturno
+        const centroX = anchoPantalla / 2;
+        const centroY = altoPantalla / 2;
+
+        // Radio libre alrededor de Saturno (Planeta + Anillos)
+        const radioExclusionPlaneta = 230; 
+
+        // Guardar posiciones para evitar colisiones entre lunas
+        const posicionesLunas = [];
+
+        // Definir zonas libres de lunas alrededor de los textos
+        // [minX, maxX, minY, maxY]
+        const zonasExclusionTexto = [
+            // 1. Zona superior (Título, subtítulo y botón de volver)
+            { minX: centroX - 250, maxX: centroX + 250, minY: 0, maxY: 130 },
+            // 2. Zona inferior (Botón de "Ir al Inicio")
+            { minX: centroX - 120, maxX: centroX + 120, minY: altoPantalla - 90, maxY: altoPantalla }
+        ];
+
+        function calcularDistancia(x1, y1, x2, y2) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        // Comprobar si un punto cae dentro de las zonas delimitadas por las palabras
+        function chocaConTexto(x, y) {
+            return zonasExclusionTexto.some(zona => 
+                x >= zona.minX && x <= zona.maxX && y >= zona.minY && y <= zona.maxY
+            );
+        }
+
+        // Algoritmo de distribución libre de colisiones (Planeta, Textos y Lunas)
+        nombresLunas.forEach((nombre) => {
+            const esGrande = lunasGrandes.includes(nombre);
+            const margenSeguridad = esGrande ? 28 : 14; 
+
+            let xValida = 0;
+            let yValida = 0;
+            let intentoValido = false;
+            let maxIntentos = 1000;
+
+            while (!intentoValido && maxIntentos > 0) {
+                maxIntentos--;
+
+                // Posición aleatoria dentro del área visible
+                const x = Math.random() * (anchoPantalla - 80) + 40;
+                const y = Math.random() * (altoPantalla - 80) + 40;
+
+                // 1. Evitar choque con textos / títulos
+                if (chocaConTexto(x, y)) {
+                    continue;
+                }
+
+                // 2. Evitar choque con Saturno y sus anillos
+                const distAlPlaneta = calcularDistancia(x, y, centroX, centroY);
+                if (distAlPlaneta < radioExclusionPlaneta) {
+                    continue; 
+                }
+
+                // 3. Evitar choque con otras lunas
+                let hayChoque = false;
+                for (let pos of posicionesLunas) {
+                    const distEntreLunas = calcularDistancia(x, y, pos.x, pos.y);
+                    if (distEntreLunas < (margenSeguridad + pos.margen)) {
+                        hayChoque = true;
+                        break;
+                    }
+                }
+
+                if (!hayChoque) {
+                    xValida = x;
+                    yValida = y;
+                    intentoValido = true;
+                }
+            }
+
+            posicionesLunas.push({ x: xValida, y: yValida, margen: margenSeguridad });
+
+            // Crear elemento en el DOM
+            const elemLuna = document.createElement('div');
+            elemLuna.className = esGrande ? 'contenedor-luna-principal' : 'contenedor-luna-menor';
+            elemLuna.style.left = `${xValida}px`;
+            elemLuna.style.top = `${yValida}px`;
+
+            const delay = (Math.random() * 4).toFixed(2);
+            const duracion = (Math.random() * 2 + 3).toFixed(2);
+            elemLuna.style.animationDelay = `${delay}s`;
+            elemLuna.style.animationDuration = `${duracion}s`;
+
+            const cuerpoLuna = document.createElement('div');
+            if (esGrande) {
+                cuerpoLuna.className = `luna luna-${nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+            } else {
+                cuerpoLuna.className = 'punto-luna';
+            }
+
+            const etiqueta = document.createElement('span');
+            etiqueta.className = esGrande ? 'nombre-luna-principal' : 'etiqueta-luna';
+            etiqueta.textContent = nombre;
+
+            elemLuna.appendChild(cuerpoLuna);
+            elemLuna.appendChild(etiqueta);
+            contenedor.appendChild(elemLuna);
+        });
+    </script>
+
+</body>
+</html>

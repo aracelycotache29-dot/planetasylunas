@@ -1,0 +1,195 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #050816;
+    color: white;
+}
+
+.universo {
+    min-height: 100vh;
+    padding: 50px 8%;
+    background:
+        radial-gradient(circle at 50% 20%, #172554, transparent 35%),
+        #050816;
+}
+
+.encabezado {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.encabezado h1 {
+    font-size: 45px;
+    margin-bottom: 12px;
+}
+
+.encabezado p {
+    color: #a5b4fc;
+    font-size: 17px;
+}
+
+.volver {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    color: #a5b4fc;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.volver:hover {
+    color: white;
+}
+
+.planetas {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.tarjeta {
+    min-height: 260px;
+    padding: 30px 20px;
+    text-align: center;
+    border: 1px solid #ffffff15;
+    border-radius: 20px;
+    background: #ffffff08;
+    backdrop-filter: blur(10px);
+    transition: .4s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-10px);
+    border-color: #6366f1;
+    box-shadow: 0 15px 40px #0008;
+}
+
+.tarjeta h2 {
+    margin-top: 25px;
+    font-size: 22px;
+}
+
+.tarjeta p {
+    margin-top: 10px;
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.planeta {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow:
+        inset -15px -15px 25px #0008,
+        0 0 25px #ffffff22;
+    transition: .5s;
+}
+
+.tarjeta:hover .planeta {
+    transform: scale(1.12) rotate(8deg);
+}
+
+.mercurio {
+    background:
+        radial-gradient(circle at 30% 30%, #d1d5db, #6b7280 60%, #1f2937);
+}
+
+.venus {
+    background:
+        radial-gradient(circle at 30% 30%, #fde68a, #d97706 60%, #78350f);
+}
+
+.tierra {
+    background:
+        radial-gradient(circle at 30% 30%, #60a5fa, #2563eb 45%, #172554);
+}
+
+.marte {
+    background:
+        radial-gradient(circle at 30% 30%, #fb923c, #dc2626 55%, #7f1d1d);
+}
+
+.jupiter {
+    background:
+        linear-gradient(
+            180deg,
+            #d6d3d1 0%,
+            #a8a29e 18%,
+            #f5d0a9 30%,
+            #92400e 42%,
+            #e7c9a9 55%,
+            #78350f 70%,
+            #d6d3d1 85%
+        );
+}
+
+.saturno {
+    background:
+        radial-gradient(circle at 30% 30%, #fef3c7, #d6a85f 60%, #78350f);
+    position: relative;
+}
+
+.anillo {
+    position: absolute;
+    width: 145px;
+    height: 38px;
+    border: 7px solid #d6b77a;
+    border-radius: 50%;
+    top: 31px;
+    left: -23px;
+    transform: rotate(-15deg);
+    box-shadow: 0 0 8px #d6b77a;
+}
+
+.urano {
+    background:
+        radial-gradient(circle at 30% 30%, #bae6fd, #38bdf8 55%, #075985);
+}
+
+.neptuno {
+    background:
+        radial-gradient(circle at 30% 30%, #60a5fa, #2563eb 55%, #172554);
+}
+
+@media (max-width: 900px) {
+
+    .planetas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .universo {
+        padding: 35px 20px;
+    }
+
+    .encabezado h1 {
+        font-size: 32px;
+        margin-top: 50px;
+    }
+
+    .volver {
+        position: static;
+        display: inline-block;
+        margin-bottom: 30px;
+    }
+
+    .planetas {
+        grid-template-columns: 1fr;
+    }
+
+}
+

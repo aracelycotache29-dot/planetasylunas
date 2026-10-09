@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeta Urano y sus 28 Lunas sin Colisiones</title>
+    <link rel="stylesheet" href="urano.css">
+</head>
+
+<body>
+
+    <div class="universo" id="escenario">
+
+        <header class="titulo">
+            <a href="planetas.html" class="volver">← Volver a planetas</a>
+            <h1>Planeta Urano</h1>
+            <p>28 lunas flotando de forma segura con sus respectivos nombres</p>
+        </header>
+
+        <!-- Estrellas de fondo -->
+        <div class="estrella e1"></div>
+        <div class="estrella e2"></div>
+        <div class="estrella e3"></div>
+        <div class="estrella e4"></div>
+        <div class="estrella e5"></div>
+        <div class="estrella e6"></div>
+        <div class="estrella e7"></div>
+        <div class="estrella e8"></div>
+
+        <!-- Planeta Urano Central con Anillos -->
+        <div class="planeta-contenedor" id="urano-centro">
+            <div class="anillo-trasero"></div>
+            <div class="planeta" id="planeta-urano"></div>
+            <div class="anillo-frontal"></div>
+        </div>
+
+        <!-- Contenedor general para las 28 lunas -->
+        <div id="contenedor-lunas"></div>
+
+        <!-- Elementos espaciales -->
+        <div class="nave nave1">🚀</div>
+        <div class="nave nave2">🛸</div>
+        <div class="cometa">☄️</div>
+
+        <!-- Botón inferior -->
+        <a href="index.html" class="boton">
+            Ir al Inicio
+        </a>
+
+    </div>
+
+    <script>
+        // Principales lunas destacadas de Urano (las 5 grandes) y el resto de oficiales hasta 28
+        const baseLunas = [
+            "Titania", "Oberón", "Umbriel", "Ariel", "Miranda",
+            "Puck", "Julieta", "Porcia", "Crésida", "Desdémona",
+            "Rosalinda", "Belinda", "Perdita", "Cupido", "Francisco",
+            "Calibán", "Estéfano", "Trínculo", "Sícorax", "Margaret",
+            "Próspero", "Setebos", "Ferdinand", "Mab", "Cordelia",
+            "Ofelia", "Bianca", "Trinculo"
+        ];
+
+        const nombresLunas = [];
+        while (nombresLunas.length < 28) {
+            nombresLunas.push(baseLunas[nombresLunas.length] || `S/2003 U ${nombresLunas.length + 1}`);
+        }
+
+        const lunasGrandes = ["Titania", "Oberón", "Umbriel", "Ariel", "Miranda"];
+        const contenedor = document.getElementById('contenedor-lunas');
+
+        function inicializarLunas() {
+            contenedor.innerHTML = '';
+
+            const anchoPantalla = window.innerWidth;
+            const altoPantalla = window.innerHeight;
+
+            const centroX = anchoPantalla / 2;
+            const centroY = altoPantalla / 2;
+
+            // Radio libre alrededor de Urano y sus anillos
+            const radioExclusionPlaneta = 210; 
+
+            const posicionesLunas = [];
+            const zonasExclusionTexto = [
+                { minX: centroX - 250, maxX: centroX + 250, minY: 0, maxY: 130 },
+                { minX: centroX - 120, maxX: centroX + 120, minY: altoPantalla - 90, maxY: altoPantalla }
+            ];
+
+            function calcularDistancia(x1, y1, x2, y2) {
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            function chocaConTexto(x, y) {
+                return zonasExclusionTexto.some(zona => 
+                    x >= zona.minX && x <= zona.maxX && y >= zona.minY && y <= zona.maxY
+                );
+            }
+
+            const fragmento = document.createDocumentFragment();
+
+            nombresLunas.forEach((nombre) => {
+                const esGrande = lunasGrandes.includes(nombre);
+                const margenSeguridad = esGrande ? 32 : 16; 
+
+                let xValida = 0;
+                let yValida = 0;
+                let intentoValido = false;
+                let maxIntentos = 500;
+
+                while (!intentoValido && maxIntentos > 0) {
+                    maxIntentos--;
+
+                    const x = Math.random() * (anchoPantalla - 80) + 40;
+                    const y = Math.random() * (altoPantalla - 80) + 40;
+
+                    if (chocaConTexto(x, y)) continue;
+
+                    const distAlPlaneta = calcularDistancia(x, y, centroX, centroY);
+                    if (distAlPlaneta < radioExclusionPlaneta) continue; 
+
+                    let hayChoque = false;
+                    for (let pos of posicionesLunas) {
+                        if (calcularDistancia(x, y, pos.x, pos.y) < (margenSeguridad + pos.margen)) {
+                            hayChoque = true;
+                            break;
+                        }
+                    }
+
+                    if (!hayChoque) {
+                        xValida = x;
+                        yValida = y;
+                        intentoValido = true;
+                    }
+                }
+
+                if (!intentoValido) {
+                    xValida = Math.random() * (anchoPantalla - 80) + 40;
+                    yValida = Math.random() * (altoPantalla - 80) + 40;
+                }
+
+                posicionesLunas.push({ x: xValida, y: yValida, margen: margenSeguridad });
+
+                const elemLuna = document.createElement('div');
+                elemLuna.className = esGrande ? 'contenedor-luna-principal' : 'contenedor-luna-menor';
+                elemLuna.style.left = `${xValida}px`;
+                elemLuna.style.top = `${yValida}px`;
+
+                const delay = (Math.random() * 4).toFixed(2);
+                const duracion = (Math.random() * 2 + 3).toFixed(2);
+                elemLuna.style.animationDelay = `${delay}s`;
+                elemLuna.style.animationDuration = `${duracion}s`;
+
+                const cuerpoLuna = document.createElement('div');
+                if (esGrande) {
+                    cuerpoLuna.className = `luna luna-${nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`;
+                } else {
+                    cuerpoLuna.className = 'punto-luna';
+                }
+
+                const etiqueta = document.createElement('span');
+                etiqueta.className = esGrande ? 'nombre-luna-principal' : 'etiqueta-luna';
+                etiqueta.textContent = nombre;
+
+                elemLuna.appendChild(cuerpoLuna);
+                elemLuna.appendChild(etiqueta);
+                fragmento.appendChild(elemLuna);
+            });
+
+            contenedor.appendChild(fragmento);
+        }
+
+        window.addEventListener('DOMContentLoaded', inicializarLunas);
+    </script>
+
+</body>
+</html>
